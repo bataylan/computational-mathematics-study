@@ -144,10 +144,11 @@ namespace ComputationalMath.Core.Domain.Matrices
             return identityMatrix;
         }
 
-        public static RealMatrix GetRowEchelonForm(this RealMatrix matrix)
+        public static RealMatrix GetRowEchelonForm(this RealMatrix input)
         {
             int startFromRow = 0;
             int? nonZeroRowIndex = null;
+            var matrix = input;
             // if this is a augmented matrix, don't check last column
 
             //column loop to check each column
@@ -189,7 +190,7 @@ namespace ComputationalMath.Core.Domain.Matrices
                 }
 
                 if (!nonZeroRowIndex.HasValue)
-                    break;
+                    continue;
 
                 //second row loop for eliminating other values in matrix
                 for (int i = nonZeroRowIndex.Value + 1; i < matrix.RowCount; i++)
@@ -224,10 +225,11 @@ namespace ComputationalMath.Core.Domain.Matrices
             return matrix;
         }
 
-        public static RealMatrix GetReducedRowEchelonForm(this RealMatrix matrix)
+        public static RealMatrix GetReducedRowEchelonForm(this RealMatrix input)
         {
             int startFromRow = 0;
             int? nonZeroRowIndex = null;
+            var matrix = input;
 
             //column loop to check each column
             for (int j = 0; j < matrix.ColumnCount; j++)
@@ -270,7 +272,7 @@ namespace ComputationalMath.Core.Domain.Matrices
                 }
 
                 if (!nonZeroRowIndex.HasValue)
-                    break;
+                    continue;
 
                 //second row loop for eliminating other values in matrix
                 for (int i = nonZeroRowIndex.Value + 1; true; i++)
@@ -310,6 +312,80 @@ namespace ComputationalMath.Core.Domain.Matrices
             }
 
             return matrix;
+        }
+
+        public static RealMatrix GetUpperTriangularMatrix(this RealMatrix input, out List<Action> eroActions)
+        {
+            int startFromRow = 0;
+            int? nonZeroRowIndex = null;
+            var matrix = input;
+            eroActions = new List<Func<RealMatrix>>();
+
+            //column loop to check each column
+            for (int j = 0; j < matrix.ColumnCount; j++)
+            {
+                nonZeroRowIndex = null;
+                //first row loop for interchange and division for leading one
+                for (int i = startFromRow; i < matrix.RowCount; i++)
+                {
+                    if (matrix.M[i][j] != 0)
+                    {
+                        nonZeroRowIndex = i;
+                        startFromRow++;
+                        break;
+                    }
+                }
+
+                if (!nonZeroRowIndex.HasValue)
+                    continue;
+
+                if (nonZeroRowIndex.Value > j)
+                    return null;
+
+                //second row loop for eliminating other values in matrix
+                for (int i = nonZeroRowIndex.Value + 1; i < matrix.RowCount; i++)
+                {
+                    var num = matrix.M[i][j];
+                    if (num != 0)
+                    {
+                        // add multiple of first nonzero row in column to current row 
+                        // for making leading of current row 0
+                        Console.WriteLine("ERO3 is applied: " + num +
+                            "*R_" + (nonZeroRowIndex + 1) + " + R_" + (i + 1) + "-> R_" + (i + 1));
+                        matrix.EROThree(rowToMultiply: nonZeroRowIndex.Value,
+                                constant: num, rowToAddIndex: i);
+                        eroActions.Add(new Func<RealMatrix>(matrix.EROThree(rowToMultiply: nonZeroRowIndex.Value,
+                                constant: num, rowToAddIndex: i)));
+                        matrix.PrintToConsole();
+                    }
+                }
+            }
+
+            //if this matrix is augmented matrix, check that 
+            if (matrix.IsAugmentedMatrix)
+            {
+                for (int i = 0; i < matrix.RowCount; i++)
+                {
+                    if (matrix.GetRow(i).IsZeroVector
+                        && matrix.M[i][matrix.ColumnCount - 1] != 0)
+                    {
+                        Console.WriteLine("Augmented matrix is inconsistent");
+                    }
+                }
+            }
+
+            return matrix;
+        }
+
+        public static void GetLUFactorization(this RealMatrix input, out RealMatrix l, out RealMatrix u)
+        {
+            var matrix = input;
+            //var lowerTriangularEROs = new List<Action>();
+            matrix.GetUpperTriangularMatrix(out List<Action> lowerTriangularEROs);
+            foreach (var ero in lowerTriangularEROs)
+            {
+                ero.Invoke();
+            }
         }
 
         public static RealMatrix GetInverse(this RealMatrix matrix)

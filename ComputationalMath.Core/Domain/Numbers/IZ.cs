@@ -6,31 +6,57 @@ namespace ComputationalMath.Core.Domain.Numbers
 {
     public static class IZ
     {
-        public class Integer 
+        public class Integer
         {
             internal Integer(int n)
             {
                 N = n;
             }
 
-            public int N { get; set; }
-            //int IComparable<Integer>.CompareTo(Integer other)
+            //internal Integer(string variable, 
+            //    Integer multiplierPart = null, 
+            //    Integer dividerPart = null,
+            //    Integer sumPart = null, 
+            //    Integer powerPart = null)
             //{
-            //    // If other is not a valid object reference, this instance is greater.
-            //    if (other == null)
-            //        return 1;
+            //    if (variable.Length > 1)
+            //        _variableName = string.Format("({0})", variable);
+            //    else
+            //        _variableName = variable;
 
-            //    // The temperature comparison depends on the comparison of
-            //    // the underlying Double values.
-            //    return other.Value.CompareTo(other.Value);
+            //    _isConstant = false;
+            //    _multiplierPart = multiplierPart;
+            //    _dividerPart = dividerPart;
+            //    _sumPart = sumPart;
+            //    _powerPart = powerPart;
             //}
+
+            public int N { get; set; }
+            
             public override string ToString()
             {
                 return N.ToString("N");
             }
 
-            #region Binary Operators
+            //private Integer _multiplierPart;
+
+            //private Integer _dividerPart;
+
+            //private Integer _sumPart;
+
+            //private Integer _powerPart;
+
+            //private string _expression = "{0}{1}{2}{3}";
+
+            //private string _variableName = "";
+            //public string VariableName => _variableName;
             
+
+            //private bool _isConstant;
+            //public bool IsConstant => _isConstant;
+
+            #region Binary Operators
+
             public static Integer operator *(Integer a, Integer b)
             {
                 return New(a.N * b.N);
@@ -155,10 +181,6 @@ namespace ComputationalMath.Core.Domain.Numbers
                 return a + (-b);
             }
             #endregion
-
-            
-
-            
 
             #region Conversion Operators
 
@@ -306,5 +328,11 @@ namespace ComputationalMath.Core.Domain.Numbers
         {
             return new Integer(n);
         }
+
+        //public static Integer New(string variable, Integer multiplierPart = null, Integer dividerPart = null,
+        //    Integer sumPart = null, Integer powerPart = null)
+        //{
+        //    return new Integer(n);
+        //}
     }
 }

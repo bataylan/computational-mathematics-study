@@ -76,7 +76,7 @@ namespace ComputationalMath.Console
             System.Console.WriteLine("Your matrix is: ");
             newMatrix.PrintToConsole();
 
-            var determinant = newMatrix.Determinant();
+            var determinant = newMatrix.GetUpperTriangularMatrix(out List<Action> eroActions);
             System.Console.WriteLine("Your determinant is: " + determinant);
 
             System.Console.ReadKey();

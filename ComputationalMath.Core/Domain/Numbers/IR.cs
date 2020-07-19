@@ -22,6 +22,35 @@ namespace ComputationalMath.Core.Domain.Numbers
                 N = numerator;
                 D = denominator;
             }
+            
+            //public RealNumber(string name)
+            //    :base(0,0)
+            //{
+            //    IsConstant = false;
+            //    VariableName = name;
+            //}
+            //private RealNumber _multiplierPart;
+
+            //private RealNumber _dividerPart;
+
+            //private RealNumber _sumPart;
+
+            //private IQ.RationalNumber _powerPart;
+
+            //private string _expression = "{0}{1}{2}{3}";
+
+            //private string _variableName;
+            //public string VariableName
+            //{
+            //    get { return _variableName; }
+            //    set
+            //    {
+            //        if (!IsConstant)
+            //            _variableName = value;
+            //        else
+            //            throw new Exception("Variable name cannot be set a real number.");
+            //    }
+            //}
 
             private int? _numerator;
             private int? _denominator;
@@ -67,36 +96,8 @@ namespace ComputationalMath.Core.Domain.Numbers
             //private bool _isRational;
             public new bool IsInteger => Value.HasValue ? false : D == 1 ? true : D == 0 && N == 0 ? true : false;
             public bool IsRational => N.HasValue && D.HasValue ? true : false;
-            //{
-            //    get { return _isRational; }
-            //    set
-            //    {
-            //        if (value)
-            //        {
-            //            if (!N.HasValue || !D.HasValue)
-            //            {
-            //                Console.WriteLine("Irrational real number cannot sign as rational number while numerator and denominator is null.");
-            //                throw new Exception("Irrational real number cannot sign as rational number while numerator and denominator is null.");
-            //            }
-            //            else
-            //            {
-            //                _isRational = value;
-            //            }
-            //        }
-            //        else
-            //        {
-            //            if (N.HasValue || D.HasValue)
-            //            {
-            //                Console.WriteLine("Rational real number cannot sign as irrational number while numerator and denominator is not null.");
-            //                throw new Exception("Rational real number cannot sign as irrational number while numerator and denominator is not null.");
-            //            }
-            //            else
-            //            {
-            //                _isRational = value;
-            //            }
-            //        }
-            //    }
-            //}
+
+            //public bool IsConstant { get; set; } 
 
             private decimal? _value;
             public decimal? Value
@@ -233,7 +234,7 @@ namespace ComputationalMath.Core.Domain.Numbers
                         var value = test.Value;
                         return New(a.ToRational() * b.ToRational());
                     }
-                        
+
                     return a.ToRational() * b;
                 }
                 else if (b.IsRational)
